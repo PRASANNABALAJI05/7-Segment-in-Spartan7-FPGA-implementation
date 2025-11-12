@@ -51,30 +51,30 @@ To design and simulate a Verilog HDL seven-segment display driver that converts 
 ## Verilog Code for Seven-Segment Display  
 
 ```verilog
-module bcd_to_7segment(
-    input  [3:0] bcd,
-    output reg [6:0] seg,
-    output reg [3:0] an
+module BCD_7(
+    input  wire [3:0] binary_input,     // DIP switches SW0-SW3
+    output reg  [6:0] seg_output,       // Segments a-g (active-low)
+    output reg  [3:0] an                // Anode control (active-low)
 );
 
-always @(*) 
-begin
-    an <= 4'b1110;
-    case (bcd)
-        4'b0000: seg = 7'b1000000;
-        4'b0001: seg = 7'b1111001;
-        4'b0010: seg = 7'b0100100;
-        4'b0011: seg = 7'b0110000;
-        4'b0100: seg = 7'b0011001;
-        4'b0101: seg = 7'b0010010;
-        4'b0110: seg = 7'b0000010;
-        4'b0111: seg = 7'b1111000;
-        4'b1000: seg = 7'b0000000;
-        4'b1001: seg = 7'b0010000;
-        default: seg = 7'b1111111;
+always @(*) begin
+    an = 4'b1110;
+
+    // Decode binary input to 7-segment pattern
+    case (binary_input)
+        4'd0: seg_output = 7'b1000000; // 0
+        4'd1: seg_output = 7'b1111001; // 1
+        4'd2: seg_output = 7'b0100100; // 2
+        4'd3: seg_output = 7'b0110000; // 3
+        4'd4: seg_output = 7'b0011001; // 4
+        4'd5: seg_output = 7'b0010010; // 5
+        4'd6: seg_output = 7'b0000010; // 6
+        4'd7: seg_output = 7'b1111000; // 7
+        4'd8: seg_output = 7'b0000000; // 8
+        4'd9: seg_output = 7'b0010000; // 9
+        default: seg_output = 7'b1111111; // Blank
     endcase
 end
-
 endmodule
 
 ```
@@ -104,7 +104,7 @@ set_property -dict { PACKAGE_PIN A8 IOSTANDARD LVCMOS33 } [get_ports {an[3]}]
 ```
 ## FPGA Implementation Output
 
-<img width="782" height="540" alt="image" src="https://github.com/user-attachments/assets/6d549830-34b0-4916-9370-fc680e71f881" />
+![FPGA 7 SEG](https://github.com/user-attachments/assets/127e82fd-d524-4746-88c5-1d0ea89d696a)
 
 
 ---
